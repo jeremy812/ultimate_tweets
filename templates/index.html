@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<title>Games</title>
+<head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel='stylesheet' href='//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css'>
+<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/flatly/bootstrap.min.css'>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src='//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'> </script>
+
+</head>
+<body>
+
+<div class="row">
+  <div class="col-md-4">
+    <table class="table table-striped table-responsive" id="teams">
+      <script>
+    $('#gamesTable').DataTable({"deferLoading": {{ n }});
+      </script>
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Rating</th>
+          <th>Twitter</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for team in teams %}
+        <tr>
+          <td><a href={{ url_for("games", team=team[0]) }} >{{team[0]}}</a></td>
+          <td>{{ team[2] }}</td>
+          <td><a href="twitter.com/{{ team[1] }}">{{ team[1] }}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+ <script>
+    $('#teams').DataTable();
+      </script>
+</html>

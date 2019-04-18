@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<title>Games</title>
+<head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel='stylesheet' href='//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css'>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js" ></script>
+<script src='//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'> </script>
+
+</head>
+<body>
+
+
+<div class="row">
+  <div class="col-md-4">
+    <table class="table table-striped" id="gamesTable">
+      <script>
+    $('#gamesTable').DataTable({"deferLoading": {{ n }});
+      </script>
+      <thead>
+        <tr>
+          <th>Home</th>
+          <th>Away</th>
+          <th>Start Time</th>
+          <th>Score</th>
+          <th>Win Probabilty Chart</th>
+          <th>Tournament</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for game in games %}
+        <tr>
+          <td>{{ game['home'] }}</td>
+          <td>{{ game['away'] }}</td>
+          <td>{{ game['game_time'] }}</td>
+          <td>{{ game['score'][0] }} - {{ game['score'][1] }} </td>
+          <td><canvas id="chart{{ loop.index }}" class="chartjs" width="200" height="200"></canvas></td>
+          <td><a href="{{ game['tournament'] }}"> {{ game['tournament'][36:] }}</a></td>
+        </tr>
+        <script> new Chart(document.getElementById("chart{{ loop.index }}"),{"type":"line","data":{"labels":[{% for pt in game['score_history'] %} "{{ pt }}", {% endfor %}],"datasets":[{"label":"{{ game['home'] }}","data":{{ game['prob_history'] }},"fill":false,"borderColor":"rgb(75, 192, 192)","lineTension":0.1},
+          {"label":"{{ game['away'] }}","data":{{ game['away_probs'] }},"fill":false,"borderColor":"rgb(192, 75, 192)","lineTension":0.1}]},"options":{   scales: {yAxes: [{
+        ticks: {
+            min: 0,
+            max: 1,
+            stepSize: .1
+        }
+    }]}}});
+      </script>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+      <script>
+    $('#gamesTable').DataTable({"order": [[ 2, "desc" ]]});
+      </script>
+</body>
+</html>
